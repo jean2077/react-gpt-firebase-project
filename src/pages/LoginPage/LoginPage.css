@@ -1,0 +1,146 @@
+.container {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 430px);
+  align-items: center;
+  gap: clamp(28px, 6vw, 72px);
+  width: min(1040px, calc(100% - 32px));
+  min-height: calc(100vh - 96px);
+  margin: 0 auto;
+  padding: 44px 0 80px;
+}
+
+.hello_2 {
+  color: var(--color-text);
+  font-size: clamp(2.3rem, 6vw, 5rem);
+  font-weight: 850;
+  line-height: 1.04;
+  animation: rise-in 620ms var(--ease-smooth) both;
+}
+
+.hello_2::after {
+  content: "오늘 배운 문장을 바로 대화로 이어가세요.";
+  display: block;
+  max-width: 440px;
+  margin-top: 18px;
+  color: var(--color-muted);
+  font-size: clamp(1rem, 2vw, 1.12rem);
+  font-weight: 500;
+  line-height: 1.7;
+}
+
+.chat_ractangle2 {
+  display: grid;
+  gap: 14px;
+  width: 100%;
+  padding: 24px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(18px);
+  animation: rise-in 720ms var(--ease-smooth) 100ms both;
+}
+
+.chat_ractangle2::before {
+  content: "로그인";
+  color: var(--color-text);
+  font-size: 1.35rem;
+  font-weight: 850;
+}
+
+.input-field {
+  width: 100%;
+  min-height: 50px;
+  padding: 0 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.82);
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.input-field:focus {
+  border-color: rgba(69, 98, 246, 0.55);
+  box-shadow: 0 0 0 4px rgba(69, 98, 246, 0.11);
+  transform: translateY(-1px);
+}
+
+.google-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 18px;
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-teal));
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+}
+
+.google-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 28px rgba(69, 98, 246, 0.22);
+}
+
+.google-button:disabled {
+  cursor: wait;
+  opacity: 0.78;
+}
+
+.error-message,
+.success-message {
+  margin: 4px 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.error-message {
+  color: #9c2f2f;
+  background: rgba(242, 109, 91, 0.12);
+}
+
+.success-message {
+  color: #256943;
+  background: rgba(73, 168, 111, 0.14);
+}
+
+.auth-link-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding-top: 8px;
+}
+
+.auth-link,
+.newmember-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0 13px;
+  border-radius: 999px;
+  color: var(--color-muted);
+  font-size: 0.92rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: color 180ms ease, background-color 180ms ease, transform 180ms ease;
+}
+
+.auth-link:hover,
+.newmember-button:hover {
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.86);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 820px) {
+  .container {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+}

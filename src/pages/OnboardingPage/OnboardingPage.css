@@ -1,0 +1,156 @@
+.FirstNewLogin {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 460px);
+  gap: clamp(24px, 5vw, 56px);
+  width: min(1120px, calc(100% - 32px));
+  min-height: calc(100vh - 96px);
+  margin: 0 auto;
+  padding: 44px 0 80px;
+}
+
+.hello_new_login {
+  grid-column: 1 / -1;
+  color: var(--color-text);
+  font-size: clamp(2rem, 5vw, 4.6rem);
+  font-weight: 850;
+  line-height: 1.04;
+  animation: rise-in 620ms var(--ease-smooth) both;
+}
+
+.FirstNewLogin .chat_ractangle {
+  grid-column: 1;
+  grid-row: 2 / span 2;
+  min-height: 430px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.64)),
+    linear-gradient(135deg, rgba(242, 109, 91, 0.13), rgba(18, 165, 148, 0.16));
+  box-shadow: var(--shadow-card);
+  animation: rise-in 700ms var(--ease-smooth) 80ms both;
+}
+
+.ballon_left,
+.ballon_right {
+  grid-column: 1;
+  z-index: 2;
+  max-width: 430px;
+  padding: 16px 18px;
+  border-radius: 8px;
+  box-shadow: 0 14px 28px rgba(28, 38, 62, 0.13);
+  animation: rise-in 640ms var(--ease-smooth) 220ms both;
+}
+
+.ballon_left {
+  align-self: start;
+  margin: -350px 0 0 28px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-teal));
+}
+
+.ballon_right {
+  justify-self: end;
+  align-self: start;
+  margin: -180px 28px 0 0;
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.teacher-selection {
+  grid-column: 2;
+  grid-row: 2 / span 2;
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding: 18px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(18px);
+  animation: rise-in 740ms var(--ease-smooth) 140ms both;
+}
+
+.teacher-selection::before {
+  content: "선생님 선택";
+  color: var(--color-muted);
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.teacher-selection .teacher {
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.72);
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease,
+    background-color 180ms ease;
+}
+
+.teacher-selection .teacher:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 22px rgba(28, 38, 62, 0.1);
+}
+
+.teacher-selection .teacher.selected {
+  color: #fff;
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-teal));
+  box-shadow: 0 16px 26px rgba(69, 98, 246, 0.22);
+}
+
+.start {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 54px;
+  padding: 0 22px;
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--color-text), #38405f);
+  box-shadow: 0 18px 32px rgba(23, 31, 54, 0.2);
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.start-disabled {
+  opacity: 0.55;
+}
+
+.start:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 38px rgba(23, 31, 54, 0.24);
+}
+
+@media (max-width: 880px) {
+  .FirstNewLogin {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .hello_new_login,
+  .FirstNewLogin .chat_ractangle,
+  .ballon_left,
+  .ballon_right,
+  .teacher-selection {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .FirstNewLogin .chat_ractangle {
+    min-height: 320px;
+  }
+
+  .ballon_left,
+  .ballon_right {
+    margin: 0;
+    justify-self: stretch;
+  }
+}
