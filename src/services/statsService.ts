@@ -10,6 +10,27 @@ export const DEFAULT_STATS: UserStats = {
 };
 
 const CHAT_STATS_KEY = 'langpt.chatStats';
+const CHAT_MESSAGES_KEY = 'langpt.chatMessages';
+
+interface StoredChatStats {
+  dailyTotalTime?: number;
+  totalChatCount?: number;
+  totalLoginTime?: number;
+  totalQuizScore?: number;
+}
+
+const readJson = <T>(key: string): T | null => {
+  if (typeof window === 'undefined' || typeof window.localStorage === 'undefined') {
+    return null;
+  }
+
+  try {
+    const value = window.localStorage.getItem(key);
+    return value ? (JSON.parse(value) as T) : null;
+  } catch {
+    return null;
+  }
+};
 
 export const fetchUserStats = async (_userId: string): Promise<UserStats | null> => {
   if (typeof window === 'undefined' || typeof window.localStorage === 'undefined') {
@@ -17,14 +38,20 @@ export const fetchUserStats = async (_userId: string): Promise<UserStats | null>
   }
 
   try {
-    const rawStats = window.localStorage.getItem(CHAT_STATS_KEY);
-    const chatStats = rawStats
-      ? (JSON.parse(rawStats) as { totalChatCount?: number })
-      : null;
+    const chatStats = readJson<StoredChatStats>(CHAT_STATS_KEY);
+    const chatMessages = readJson<Array<{ sender?: string }>>(CHAT_MESSAGES_KEY) ?? [];
+    const userMessageCount = chatMessages.filter((message) => message.sender === 'user').length;
+    const totalChatCount = Math.max(chatStats?.totalChatCount ?? 0, userMessageCount);
+    const estimatedStudyMinutes = totalChatCount * 4;
+    const dailyTotalTime = Math.max(chatStats?.dailyTotalTime ?? 0, estimatedStudyMinutes);
 
     return {
       ...DEFAULT_STATS,
-      weeklyChatCount: chatStats?.totalChatCount ?? DEFAULT_STATS.weeklyChatCount,
+      weeklyChatCount: totalChatCount,
+      dailyAvgStudyTime: Math.round(dailyTotalTime / 7),
+      dailyTotalTime,
+      totalQuizScore: chatStats?.totalQuizScore ?? DEFAULT_STATS.totalQuizScore,
+      totalLoginTime: chatStats?.totalLoginTime ?? DEFAULT_STATS.totalLoginTime,
     };
   } catch {
     return DEFAULT_STATS;

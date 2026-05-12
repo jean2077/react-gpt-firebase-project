@@ -25,7 +25,26 @@ const writeMessages = (messages: ChatMessage[]): void => {
     return;
   }
 
+  const previousStats = (() => {
+    try {
+      const value = window.localStorage.getItem(CHAT_STATS_KEY);
+      return value ? (JSON.parse(value) as Record<string, unknown>) : {};
+    } catch {
+      return {};
+    }
+  })();
+  const userMessageCount = messages.filter((message) => message.sender === 'user').length;
+
   window.localStorage.setItem(CHAT_MESSAGES_KEY, JSON.stringify(messages));
+  window.localStorage.setItem(
+    CHAT_STATS_KEY,
+    JSON.stringify({
+      ...previousStats,
+      totalChatCount: userMessageCount,
+      dailyTotalTime: userMessageCount * 4,
+      lastUpdated: new Date().toISOString(),
+    })
+  );
   window.dispatchEvent(new Event(CHAT_MESSAGES_EVENT));
 };
 
@@ -65,7 +84,7 @@ export const saveChatStats = async (chatCount: number): Promise<void> => {
   window.localStorage.setItem(
     CHAT_STATS_KEY,
     JSON.stringify({
-    totalChatCount: chatCount,
+      totalChatCount: chatCount,
       lastUpdated: new Date().toISOString(),
     })
   );

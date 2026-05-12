@@ -8,19 +8,40 @@
   gap: 18px;
   width: min(1120px, calc(100% - 32px));
   min-height: 64px;
+  overflow: hidden;
   margin: 16px auto 0;
   padding: 10px 12px 10px 14px;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--glass-border);
   border-radius: 999px;
-  background: color-mix(in srgb, var(--color-surface) 86%, transparent);
-  box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(20px);
+  background:
+    var(--glass-bg-strong),
+    linear-gradient(135deg, rgba(69, 98, 246, 0.1), rgba(18, 165, 148, 0.09));
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   animation: header-drop 520ms var(--ease-smooth) both;
+}
+
+.app-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(112deg, transparent 18%, rgba(255, 255, 255, 0.58), transparent 54%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.42), transparent 62%);
+  opacity: 0;
+  transform: translateX(-42%);
+  pointer-events: none;
+  animation: panel-sheen 900ms var(--ease-smooth) 260ms both;
 }
 
 .app-header__brand,
 .app-header__action,
-.app-header__link {
+.app-header__link,
+.app-header__theme-toggle {
+  position: relative;
+  z-index: 1;
   text-decoration: none;
 }
 
@@ -46,9 +67,12 @@
   justify-content: center;
   gap: 4px;
   padding: 4px;
-  border: 1px solid rgba(23, 31, 54, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.68);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.64);
+  background: rgba(255, 255, 255, 0.34);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(18px) saturate(1.25);
+  -webkit-backdrop-filter: blur(18px) saturate(1.25);
 }
 
 .app-header__link,
@@ -75,8 +99,86 @@
 .app-header__link:hover,
 .app-header__link--active {
   color: var(--color-text);
-  background: #fff;
-  box-shadow: 0 8px 18px rgba(29, 36, 56, 0.08);
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow:
+    0 8px 18px rgba(29, 36, 56, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86);
+}
+
+.app-header__link--active {
+  animation: selected-pulse 1200ms ease-out;
+}
+
+.app-header__link:hover {
+  transform: translateY(-1px);
+}
+
+.app-header__theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 12px 0 8px;
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  border-radius: 999px;
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.36);
+  box-shadow:
+    0 10px 22px rgba(28, 38, 62, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78);
+  font-size: 0.84rem;
+  font-weight: 850;
+  cursor: pointer;
+  backdrop-filter: blur(18px) saturate(1.25);
+  -webkit-backdrop-filter: blur(18px) saturate(1.25);
+  transition:
+    transform 180ms ease,
+    background-color 180ms ease,
+    box-shadow 180ms ease,
+    color 180ms ease;
+}
+
+.app-header__theme-toggle:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.66);
+  box-shadow:
+    0 14px 26px rgba(28, 38, 62, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86);
+}
+
+.app-header__theme-icon {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--color-amber), #fff3b2);
+  box-shadow:
+    0 8px 18px rgba(243, 178, 61, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78);
+}
+
+.app-header__theme-icon::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+}
+
+.app-header__theme-toggle--dark .app-header__theme-icon {
+  background: linear-gradient(135deg, #7c91ff, #18243b);
+  box-shadow:
+    0 8px 18px rgba(124, 145, 255, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.26);
+}
+
+.app-header__theme-toggle--dark .app-header__theme-icon::before {
+  width: 13px;
+  height: 13px;
+  background: #eef3ff;
+  box-shadow: 5px -2px 0 #18243b;
 }
 
 .app-header__action {
@@ -110,8 +212,10 @@
 
 .app-header__action--ghost {
   color: var(--color-text);
-  background: rgba(255, 255, 255, 0.78);
-  border: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.46);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 @keyframes header-drop {
@@ -146,6 +250,12 @@
     order: 3;
     width: 100%;
     justify-content: space-between;
+  }
+
+  .app-header__theme-toggle {
+    order: 2;
+    min-width: 82px;
+    padding-right: 10px;
   }
 
   .app-header__link {

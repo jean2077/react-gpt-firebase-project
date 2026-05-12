@@ -26,7 +26,7 @@ test('logs in with one click and stores a local demo session', async () => {
   await user.click(await screen.findByRole('button', { name: '로그인' }));
 
   await waitFor(() => {
-    expect(window.location.pathname).toBe('/first_new_login');
+    expect(window.location.pathname).toBe('/chat');
   });
 
   const session = JSON.parse(

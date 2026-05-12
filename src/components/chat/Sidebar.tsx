@@ -11,13 +11,12 @@ interface SidebarProps {
 const Sidebar = ({ setIsSidebarOpen }: SidebarProps) => {
     const navigate = useNavigate();
 
-    // 마이페이지로 이동하는 함수 수정
     const handleHomeClick = () => {
         navigate(ROUTES.stats);
     };
 
     const handleNewChatClick = () => {
-        navigate(ROUTES.onboarding);
+        navigate(ROUTES.chat);
     };
 
     return (
@@ -28,7 +27,6 @@ const Sidebar = ({ setIsSidebarOpen }: SidebarProps) => {
                 <button className="close-button" onClick={() => setIsSidebarOpen(false)}>닫기</button>
             </div>
             <ChatLog />
-            {/* 마이페이지 버튼 클릭 시 /stats로 리다이렉트 */}
             <button className="home-button" onClick={handleHomeClick}>마이 페이지</button>
         </div>
     );
