@@ -20,9 +20,10 @@ const navItems = [
 ];
 
 type NavGlassStyle = CSSProperties & {
-  '--active-index': number;
+  '--active-x': string;
   '--active-opacity': number;
   '--nav-count': number;
+  '--nav-item-width': string;
 };
 
 function AppHeader() {
@@ -38,10 +39,14 @@ function AppHeader() {
       ),
     [location.pathname],
   );
+  const activeNavStep = Math.max(activeNavIndex, 0);
   const navGlassStyle: NavGlassStyle = {
-    '--active-index': Math.max(activeNavIndex, 0),
+    '--active-x': `calc(${activeNavStep * 100}% + ${activeNavStep * 4}px)`,
     '--active-opacity': activeNavIndex >= 0 ? 1 : 0,
     '--nav-count': navItems.length,
+    '--nav-item-width': `calc(${100 / navItems.length}% - ${
+      ((navItems.length - 1) * 4 + 8) / navItems.length
+    }px)`,
   };
 
   useEffect(() => subscribeToLocalAuth(setCurrentUser), []);

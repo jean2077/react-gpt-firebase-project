@@ -328,7 +328,6 @@ html[data-theme='dark'] .landing-final::after {
   opacity: 0.42;
 }
 
-html[data-theme='dark'] .app-header__nav,
 html[data-theme='dark'] .app-header__theme-toggle,
 html[data-theme='dark'] .app-header__action--ghost,
 html[data-theme='dark'] .secondary-action,
@@ -359,8 +358,6 @@ html[data-theme='dark'] .board-post-item--active {
     inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
 }
 
-html[data-theme='dark'] .app-header__link:hover,
-html[data-theme='dark'] .app-header__link--active,
 html[data-theme='dark'] .language-chip:hover,
 html[data-theme='dark'] .language-chip--active,
 html[data-theme='dark'] .mode-chip:hover,
