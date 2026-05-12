@@ -1,8 +1,9 @@
 export const ROUTES = {
   home: '/',
   login: '/login',
-  onboarding: '/first_new_login',
   chat: '/chat',
+  board: '/board',
+  vocabulary: '/vocabulary',
   signup: '/management',
   stats: '/stats',
   findAccount: '/findpassword',

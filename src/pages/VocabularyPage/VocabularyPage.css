@@ -1,0 +1,295 @@
+.vocabulary-page {
+  position: relative;
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 44px 0 80px;
+  animation: rise-in 620ms var(--ease-smooth) both;
+}
+
+.vocabulary-page::before {
+  content: "";
+  position: absolute;
+  inset: 24px -32px auto auto;
+  z-index: -1;
+  width: min(46vw, 520px);
+  height: 360px;
+  border-radius: 40px;
+  background:
+    linear-gradient(135deg, rgba(69, 98, 246, 0.15), transparent 52%),
+    linear-gradient(35deg, rgba(18, 165, 148, 0.14), transparent 60%);
+  filter: blur(30px);
+}
+
+.vocabulary-hero {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.vocabulary-hero h1 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(2.5rem, 5vw, 4.4rem);
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+
+.vocabulary-hero p:not(.eyebrow) {
+  max-width: 680px;
+  margin: 12px 0 0;
+  color: var(--color-muted);
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+.vocabulary-count {
+  display: grid;
+  place-items: center;
+  width: 156px;
+  height: 126px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.52);
+  border-radius: 8px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.48)),
+    linear-gradient(135deg, rgba(69, 98, 246, 0.14), rgba(18, 165, 148, 0.12));
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(22px);
+}
+
+.vocabulary-count strong {
+  color: var(--color-text);
+  font-size: 2.8rem;
+  line-height: 1;
+}
+
+.vocabulary-count span {
+  color: var(--color-muted);
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+.vocabulary-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.vocabulary-toolbar button {
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-muted);
+  background: rgba(255, 255, 255, 0.72);
+  font-weight: 850;
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.vocabulary-toolbar button:hover,
+.vocabulary-toolbar .vocabulary-filter--active {
+  color: var(--color-text);
+  background: #fff;
+  box-shadow: 0 10px 22px rgba(28, 38, 62, 0.1);
+  transform: translateY(-1px);
+}
+
+.vocabulary-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.42fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.vocabulary-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.vocabulary-card,
+.vocabulary-form,
+.vocabulary-empty {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  border-radius: 8px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.54)),
+    linear-gradient(135deg, rgba(69, 98, 246, 0.08), rgba(18, 165, 148, 0.08));
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(22px) saturate(1.2);
+  animation: item-stagger-in 520ms var(--ease-smooth) both;
+}
+
+.vocabulary-card {
+  display: grid;
+  gap: 12px;
+  min-height: 210px;
+  padding: 18px;
+}
+
+.vocabulary-card__topline,
+.vocabulary-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.vocabulary-card__topline span {
+  width: fit-content;
+  padding: 5px 10px;
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-teal));
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.vocabulary-card__topline small,
+.vocabulary-card em {
+  color: var(--color-muted);
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.vocabulary-card p {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1.08rem;
+  font-weight: 850;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.vocabulary-card em {
+  font-style: normal;
+  line-height: 1.5;
+}
+
+.vocabulary-card__actions button,
+.vocabulary-form button {
+  min-height: 42px;
+  padding: 0 14px;
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-teal));
+  font-weight: 850;
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.vocabulary-card__actions button:hover,
+.vocabulary-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 24px rgba(69, 98, 246, 0.2);
+}
+
+.vocabulary-card__actions .vocabulary-card__delete {
+  color: var(--color-coral);
+  background: rgba(242, 109, 91, 0.1);
+}
+
+.vocabulary-form,
+.vocabulary-empty {
+  display: grid;
+  gap: 14px;
+  padding: 22px;
+}
+
+.vocabulary-form {
+  position: sticky;
+  top: 104px;
+}
+
+.vocabulary-form h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1.35rem;
+}
+
+.vocabulary-form label {
+  display: grid;
+  gap: 8px;
+  color: var(--color-muted);
+  font-size: 0.86rem;
+  font-weight: 850;
+}
+
+.vocabulary-form input,
+.vocabulary-form select,
+.vocabulary-form textarea {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.88);
+  font: inherit;
+}
+
+.vocabulary-form input,
+.vocabulary-form select {
+  min-height: 44px;
+  padding: 0 12px;
+}
+
+.vocabulary-form textarea {
+  resize: vertical;
+  padding: 12px;
+  line-height: 1.6;
+}
+
+.vocabulary-empty {
+  grid-column: 1 / -1;
+  color: var(--color-muted);
+}
+
+.vocabulary-empty strong {
+  color: var(--color-text);
+}
+
+.vocabulary-empty p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+@media (max-width: 920px) {
+  .vocabulary-hero,
+  .vocabulary-layout {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .vocabulary-list {
+    grid-template-columns: 1fr;
+  }
+
+  .vocabulary-form {
+    position: relative;
+    top: auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .vocabulary-page {
+    width: min(100% - 20px, 1120px);
+    padding-top: 32px;
+  }
+
+  .vocabulary-count {
+    width: 100%;
+  }
+}

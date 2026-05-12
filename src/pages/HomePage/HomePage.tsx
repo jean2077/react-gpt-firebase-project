@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../app/routes';
 import './HomePage.css';
@@ -36,7 +36,116 @@ const flowSteps = [
   '퀴즈와 기록으로 복습 루틴을 만듭니다.',
 ];
 
+type PreviewMessage = {
+  id: string;
+  sender: 'teacher' | 'student';
+  text: string;
+};
+
 function HomePage() {
+  const previewMessages = useMemo<PreviewMessage[]>(
+    () => [
+      {
+        id: 'greeting',
+        sender: 'teacher',
+        text: '안녕하세요! 오늘은 把자문을 대화로 연습해볼게요.',
+      },
+      {
+        id: 'try',
+        sender: 'student',
+        text: '선생님, "I finished my homework"를 중국어로 말해볼게요.',
+      },
+      {
+        id: 'feedback',
+        sender: 'teacher',
+        text: '좋아요. "我把作业做完了"처럼 말하면 더 자연스러워요.',
+      },
+      {
+        id: 'followup',
+        sender: 'student',
+        text: '그러면 "I cleaned my room"도 把자문으로 바꿔볼게요.',
+      },
+    ],
+    []
+  );
+
+  const [activeMessageIndex, setActiveMessageIndex] = useState(0);
+  const [typedText, setTypedText] = useState('');
+
+  useEffect(() => {
+    const revealTargets = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'));
+
+    if (!('IntersectionObserver' in window)) {
+      revealTargets.forEach((target) => target.classList.add('is-visible'));
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        rootMargin: '0px 0px -12% 0px',
+        threshold: 0.18,
+      }
+    );
+
+    revealTargets.forEach((target) => observer.observe(target));
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const currentMessage = previewMessages[activeMessageIndex];
+
+    if (!currentMessage) {
+      const resetTimer = window.setTimeout(() => {
+        setActiveMessageIndex(0);
+        setTypedText('');
+      }, 1800);
+
+      return () => window.clearTimeout(resetTimer);
+    }
+
+    setTypedText('');
+    let characterIndex = 0;
+    let typingTimer: number | undefined;
+    let nextMessageTimer: number | undefined;
+
+    const startDelay = window.setTimeout(() => {
+      typingTimer = window.setInterval(() => {
+        characterIndex += 1;
+        setTypedText(currentMessage.text.slice(0, characterIndex));
+
+        if (characterIndex >= currentMessage.text.length) {
+          window.clearInterval(typingTimer);
+          nextMessageTimer = window.setTimeout(() => {
+            setActiveMessageIndex((index) => index + 1);
+          }, currentMessage.sender === 'teacher' ? 840 : 620);
+        }
+      }, currentMessage.sender === 'teacher' ? 28 : 22);
+    }, currentMessage.sender === 'teacher' ? 460 : 280);
+
+    return () => {
+      window.clearTimeout(startDelay);
+      if (typingTimer) {
+        window.clearInterval(typingTimer);
+      }
+      if (nextMessageTimer) {
+        window.clearTimeout(nextMessageTimer);
+      }
+    };
+  }, [activeMessageIndex, previewMessages]);
+
+  const completedMessages = previewMessages.slice(0, activeMessageIndex);
+  const activeMessage = previewMessages[activeMessageIndex];
+  const isChatLoopFinished = activeMessageIndex >= previewMessages.length;
+
   return (
     <main className="landing-page">
       <section className="landing-hero" aria-label="LangPT 소개">
@@ -50,8 +159,7 @@ function HomePage() {
           <p className="landing-hero__eyebrow">AI language practice</p>
           <h1 className="landing-hero__title">LangPT</h1>
           <p className="landing-hero__copy">
-            영어와 중국어를 설명으로만 외우지 않고, 실제 대화처럼 말하고 고쳐보는
-            언어 학습 공간입니다.
+            AI 선생님과 대화하며 매일 언어를 연습하세요.
           </p>
           <div className="landing-hero__actions">
             <Link to={ROUTES.login} className="long_rectangle_mp">
@@ -70,16 +178,34 @@ function HomePage() {
               <span />
               <span />
             </div>
-            <div className="chat-window__body">
-              <div className="chat-message chat-message--teacher">
-                안녕하세요! 오늘은 把자문을 대화로 연습해볼게요.
-              </div>
-              <div className="chat-message chat-message--student">
-                선생님, "I finished my homework"를 중국어로 말해볼게요.
-              </div>
-              <div className="chat-message chat-message--teacher chat-message--feedback">
-                좋아요. 문장 구조를 자연스럽게 바꾸면 더 매끄러워져요.
-              </div>
+            <div className="chat-window__status">
+              <span className="status-dot" />
+              AI 선생님이 대화를 이어가는 중
+            </div>
+            <div className="chat-window__body" aria-live="polite">
+              {completedMessages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`chat-message chat-message--${message.sender}`}
+                >
+                  {message.text}
+                </div>
+              ))}
+              {activeMessage && (
+                <div
+                  className={`chat-message chat-message--${activeMessage.sender} chat-message--active`}
+                >
+                  {typedText || <span className="typing-dots" aria-label="입력 중" />}
+                  {typedText && typedText.length < activeMessage.text.length && (
+                    <span className="typing-caret" aria-hidden="true" />
+                  )}
+                </div>
+              )}
+              {isChatLoopFinished && (
+                <div className="chat-message chat-message--teacher chat-message--active">
+                  <span className="typing-dots" aria-label="다음 대화 준비 중" />
+                </div>
+              )}
             </div>
             <div className="chat-window__composer">
               <span>오늘 배운 문장으로 답장하기</span>
@@ -93,18 +219,36 @@ function HomePage() {
         </a>
       </section>
 
-      <section id="site-intro" className="landing-section landing-section--intro">
-        <div className="landing-section__copy">
-          <p className="eyebrow">What LangPT does</p>
-          <h2>혼자 공부할 때 비어 있던 대화 시간을 채워줍니다.</h2>
+      <section
+        id="site-intro"
+        className="landing-section landing-section--intro"
+        data-reveal
+      >
+        <div className="landing-section__copy" data-reveal>
+          <p className="eyebrow">What LangPT means</p>
+          <h2>LangPT의 두 가지 뜻</h2>
           <p>
-            LangPT는 문법, 회화, 퀴즈, 학습 기록을 하나의 흐름으로 묶습니다. 사용자는
-            선생님을 고르고, 바로 채팅하고, 배운 내용을 다시 확인할 수 있습니다.
+            AI와 바로 대화하는 언어 연습, 그리고 나에게 맞춘 개인 언어 훈련입니다.
           </p>
         </div>
+        <div className="brand-meaning" aria-label="LangPT 브랜드 의미" data-reveal>
+          <span>
+            <strong>Lang + GPT</strong>
+            AI와 대화하며 배우는 언어 학습
+          </span>
+          <span>
+            <strong>Language Personal Training</strong>
+            개인에게 맞춘 반복 훈련
+          </span>
+        </div>
         <div className="feature-grid">
-          {featureCards.map((feature) => (
-            <article key={feature.title} className={`feature-card feature-card--${feature.accent}`}>
+          {featureCards.map((feature, index) => (
+            <article
+              key={feature.title}
+              className={`feature-card feature-card--${feature.accent}`}
+              data-reveal
+              style={{ '--reveal-delay': `${index * 90}ms` } as React.CSSProperties}
+            >
               <h3>{feature.title}</h3>
               <p>{feature.description}</p>
             </article>
@@ -112,14 +256,18 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="landing-section landing-section--flow">
-        <div className="landing-section__copy">
+      <section className="landing-section landing-section--flow" data-reveal>
+        <div className="landing-section__copy" data-reveal>
           <p className="eyebrow">Learning flow</p>
           <h2>짧게 시작해서 매일 이어지는 학습 루틴</h2>
         </div>
         <ol className="flow-list">
           {flowSteps.map((step, index) => (
-            <li key={step}>
+            <li
+              key={step}
+              data-reveal
+              style={{ '--reveal-delay': `${index * 80}ms` } as React.CSSProperties}
+            >
               <span>{String(index + 1).padStart(2, '0')}</span>
               <p>{step}</p>
             </li>
@@ -127,7 +275,7 @@ function HomePage() {
         </ol>
       </section>
 
-      <section className="landing-final">
+      <section className="landing-final" data-reveal>
         <h2>오늘 배운 표현을 바로 말해보세요.</h2>
         <Link to={ROUTES.login} className="primary-action">
           로그인하고 시작하기
