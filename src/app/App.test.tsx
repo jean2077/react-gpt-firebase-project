@@ -23,7 +23,8 @@ test('logs in with one click and stores a local demo session', async () => {
   render(<App />);
 
   await user.click(screen.getByRole('link', { name: /무료로 이용해보세요/ }));
-  await user.click(await screen.findByRole('button', { name: '로그인' }));
+  await user.click(await screen.findByRole('button', { name: '데모로 바로 시작' }));
+  await user.click(await screen.findByRole('button', { name: '채팅으로 이동' }));
 
   await waitFor(() => {
     expect(window.location.pathname).toBe('/chat');
